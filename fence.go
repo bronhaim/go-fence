@@ -1,8 +1,9 @@
-package fence
+package main
 
 import (
 	"fmt"
 	"time"
+	"github.com/bronhaim/go-fence-rhprovider"
 )
 
 type Action uint8
@@ -55,8 +56,33 @@ type Fence struct {
 	providers map[string]FenceProvider
 }
 
-func New() *Fence {
+func getFenceInstance() *Fence {
 	return &Fence{providers: make(map[string]FenceProvider)}
+}
+
+
+func main() {
+	f := getFenceInstance()
+	provider := NewFakeProvider()
+	err := provider.LoadAgents(0)
+	if err != nil {
+		t.Error("error:", err)
+	}
+	f.RegisterProvider("fakeprovider", provider)
+
+	ac := NewAgentConfig("fakeprovider", "agent01")
+	ac.SetPort("port01")
+
+	err = f.Run(ac, On, 0)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = f.Run(ac, Off, 0)
+	if err != nil {
+		t.Error(err)
+	}
+	fmt.Printf("\nhey")
 }
 
 // Register the specified fence provider.

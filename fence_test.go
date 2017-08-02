@@ -1,4 +1,4 @@
-package fence
+package main
 
 import (
 	"errors"
@@ -6,7 +6,7 @@ import (
 )
 
 func TestVerifyAgentConfig(t *testing.T) {
-	f := New()
+	f := getFenceInstance()
 	provider := NewFakeProvider()
 	err := provider.LoadAgents(0)
 	if err != nil {
@@ -82,7 +82,7 @@ func TestVerifyAgentConfig(t *testing.T) {
 }
 
 func TestRun(t *testing.T) {
-	f := New()
+	f := getFenceInstance()
 	provider := NewFakeProvider()
 	err := provider.LoadAgents(0)
 	if err != nil {
